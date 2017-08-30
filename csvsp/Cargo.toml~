@@ -1,0 +1,6 @@
+[package]
+name = "csvsp"
+version = "0.1.0"
+authors = ["os"]
+
+[dependencies]
