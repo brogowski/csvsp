@@ -1,12 +1,17 @@
 extern crate csv;
 
+#[macro_use]
+extern crate quick_error;
+
+
+
 use std::error::Error;
 use std::fs::File;
 use std::io::Write;
 use std::thread;
 use std::sync::mpsc;
 use std::sync::mpsc::Sender;
-use errors::CommonError;
+use errors::CommonError::CommonError;
 
 mod errors;
 
@@ -17,7 +22,7 @@ pub fn run(args: Vec<String>) -> Result<(), Box<Error>> {
     //}
 
     match args.get(1) {
-        None => Err(Box::new(CommonError::new("Missing file parameter"))),
+        None => Err(Box::new(CommonError("Missing file parameter"))),
         Some(x) => split_file(x),
     }
 }
@@ -30,7 +35,7 @@ fn split_file(filepath: &str) -> Result<(), Box<Error>> {
     let mut iter = reader.records();
     let headers = iter.next();
     match headers {
-        None => Err(Box::new(CommonError::new("No records to work with"))),
+        None => Err(Box::new(CommonError("No records to work with"))),
         Some(x) => {
             let mut threads = Vec::new();
             let mut inputs: Vec<Sender<String>> = Vec::new();
